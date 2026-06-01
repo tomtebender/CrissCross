@@ -298,17 +298,22 @@ func cmd_make(bs bool) {
 				finalcmd += fmt.Sprintf("-o ${BUILDDIR}/%s/%s.elf generated/%s/%s*.o", tcname, tname, tcname, tname)
 				archtargets = fmt.Sprintf("%s\n\tCrissCross/toolchains/%s%s%s", archtargets, tc.LocationAfter, tc.BinPrefix, finalcmd)
 			case "so":
-				finalcmd += fmt.Sprintf("-shared -o ${BUILDDIR}/%s/%s.so generated/%s/%s*.o\n\tln -s ${BUILDDIR}/%s/%s.so generated/lib/%s/", tcname, tname, tcname, tname, tcname, tname, tcname)
+				finalcmd += fmt.Sprintf("-shared -o ${BUILDDIR}/%s/%s.so generated/%s/%s*.o\n\tln -sf ${BUILDDIR}/%s/%s.so generated/lib/%s/", tcname, tname, tcname, tname, tcname, tname, tcname)
 				archtargets = fmt.Sprintf("%s\n\tCrissCross/toolchains/%s%s%s", archtargets, tc.LocationAfter, tc.BinPrefix, finalcmd)
 			case "a":
-				archtargets = fmt.Sprintf("%s\n\tar rcs ${BUILDDIR}/%s/%s.a\n\tln -s ${BUILDDIR}/%s/%s.a generated/lib/%s/", archtargets, tcname, tname, tcname, tname, tcname)
+				archtargets = fmt.Sprintf("%s\n\tar rcs ${BUILDDIR}/%s/%s.a\n\tln -sf ${BUILDDIR}/%s/%s.a generated/lib/%s/", archtargets, tcname, tname, tcname, tname, tcname)
 			}
 		}
 
 		makefile_second = makefile_second + "\n" + maintarget + archtargets
 	}
-
-	err = os.WriteFile("./Makefile", []byte(makefile_first+makefile_second+`
+	// "\n\techo \"\\033[38;2;127;0;255mThis Makefile was automatically generated using the CrissCross build system.\\nPlease check it out at https://codeberg.org/tomteb/CrissCross, CrissCross depends on your support! \\033[38;2;255;0;127m\\033[5m♥\\033[0m\""
+	err = os.WriteFile("./Makefile", []byte(makefile_first+`
+	@echo "\033[38;2;255;0;127m♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ \n\
+	                                  \033[38;2;0;255;0mYour build finished succesfully! ☺ \n\n\
+	             \033[38;2;127;0;255mThis Makefile was automatically generated using the CrissCross build system. \n\
+	Please check it out at https://codeberg.org/tomteb/CrissCross. CrissCross depends on your support! \033[38;2;255;0;127m\033[5m♥\033[25m \n\
+	♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡\\033[0m"`+makefile_second+`
 
 clean:
 	@rm -rvf ${BUILDDIR} generated
