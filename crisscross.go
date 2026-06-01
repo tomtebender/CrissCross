@@ -208,7 +208,7 @@ func cmd_make(bs bool) {
 		return
 	}
 
-	makefile_first := "BUILDDIR=BUILD\n\nall:"
+	makefile_first := "# please only use absolute paths for the builddir\nBUILDDIR=${PWD}/BUILD\n\nall:"
 	var makefile_second string = ""
 
 	for tname, target := range yml.Targets {
@@ -307,7 +307,6 @@ func cmd_make(bs bool) {
 
 		makefile_second = makefile_second + "\n" + maintarget + archtargets
 	}
-	// "\n\techo \"\\033[38;2;127;0;255mThis Makefile was automatically generated using the CrissCross build system.\\nPlease check it out at https://codeberg.org/tomteb/CrissCross, CrissCross depends on your support! \\033[38;2;255;0;127m\\033[5m♥\\033[0m\""
 	err = os.WriteFile("./Makefile", []byte(makefile_first+`
 	@echo "\033[38;2;255;0;127m♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ \n\
 	                                  \033[38;2;0;255;0mYour build finished succesfully! ☺ \n\n\
